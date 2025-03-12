@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: stemagetter
+  template:
+    metadata:
+      labels:
+        app: steamgetter
+    spec:
+      containers:
+        - name: steamgetter
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_0a23d47bd49e
+          imagePullPolicy: Always
