@@ -1,4 +1,3 @@
-M gradle:8.5-jdk17 AS builder
 WORKDIR /app
 
 # 소스 코드 복사
