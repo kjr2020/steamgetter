@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.example'
+version = '1.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'com.example.SteamGetter'
+}
+
+dependencies {
+    implementation 'org.postgresql:postgresql:42.7.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'  // API 호출을 위한 OkHttp 라이브러리
+    implementation 'com.google.code.gson:gson:2.10'   // JSON 파싱 라이브러리
+    implementation 'mysql:mysql-connector-java:8.0.33'
+}
+
+tasks.named('shadowJar') {
+    archiveClassifier.set('')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.named("distZip") {
+    dependsOn tasks.named("shadowJar")
+}
+
+tasks.named("distTar") {
+    dependsOn tasks.named("shadowJar")
+}
+
+tasks.named("startScripts") {
+    dependsOn tasks.named("shadowJar")
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': 'com.example.SteamGetter'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+tasks.jar {
+    enabled = false
+}
